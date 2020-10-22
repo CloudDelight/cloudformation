@@ -1,0 +1,39 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Metadata:
+  Description: 'This is the template which helps to provision Application Load balancer in the AWS account'
+Parameters:
+  InstanceTypes:
+    Description: These servers will be tagged to the load balancer which is created in this CFT
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - m5.xlarge
+      - t2.medium
+      - c5.xlarge
+  KeyName:
+      Description: Valid Keypair name
+      Type: AWS::EC2::KeyPair::KeyName
+  LoadBalancerName: 
+      Description: Name of the load Balancer
+      Type: String
+Resources:
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceTypes
+      KeyName: !Ref KeyName
+      Tags:
+        - Key: Name
+          Value: InstanceLB
+      ImageId: "ami-0947d2ba12ee1ff75"
+  ElasticLoadBalancer:
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Properties:
+      LoadBalancerName: !Ref LoadBalancerName
+      AvailabilityZones: !GetAZs ''
+      Listeners:
+        - LoadBalancerPort: '80'
+          InstancePort: '80'
+          Protocol: HTTP

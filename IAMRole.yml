@@ -1,0 +1,31 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Template to create IAM Role With Administrator access
+Parameters:
+  RoleName: 
+    Description: Enter the role Name Required
+    Type: String
+Resources:
+  IAMRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Ref RoleName
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - "codebuild.amazonaws.com"
+                - "codepipeline.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: /service-role/
+      Policies:
+        - PolicyName: "AdministratorAccess"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "*"
+                Resource: "*"

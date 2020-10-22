@@ -1,0 +1,19 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Creating S3bucket using cloud Formation Template
+Parameters:
+  BucketName:
+    Type: String
+    Description: The Name specified should be unique as this is DNS compliant
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      Tags:
+        - Key: CreatedBy
+          Value: CloudFormation
+Outputs:
+  S3Bucket:
+    Value: !Ref S3Bucket
+    Description: S3 Bucket for storage of Objects
